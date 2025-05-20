@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
  *
@@ -12,6 +13,7 @@
  */
 
 namespace Horde\Http\Server;
+
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -48,11 +50,11 @@ class Gzip implements MiddlewareInterface
 
         // Compress the response and set header
         $stream = $response->getBody();
-        // TODO: Consume stream in chunks, this could be large amounts of data. 
+        // TODO: Consume stream in chunks, this could be large amounts of data.
         $compressedStream = $this->streamFactory->createStream($stream->getContents());
         $response = $response->withHeader('Content-Encoding', 'gzip');
         // TODO: Make this work again
-//        $response = $response->withHeader('Content-Length', $this->_byteCount($body));
+        //        $response = $response->withHeader('Content-Length', $this->_byteCount($body));
         $response = $response->withBody($compressedStream);
 
         return $response;

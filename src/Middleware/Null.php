@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Http\Server\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;

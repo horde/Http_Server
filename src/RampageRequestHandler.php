@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Http\Server;
 
 use Psr\Http\Server\RequestHandlerInterface;
@@ -26,7 +27,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  * Once a response is returned, the response object passes back through
  * all the previous layers and may be changed by them or cause side effects.
  *
- * The final response returned by RampageRequestHandler should 
+ * The final response returned by RampageRequestHandler should
  *
  * Note that middlewares or the payload could themselves delegate their
  * duties to other middlewares, handlers or other code
@@ -55,8 +56,7 @@ class RampageRequestHandler implements RequestHandlerInterface
         StreamFactoryInterface $streamFactory,
         iterable $middlewares = [],
         ?RequestHandlerInterface $payloadHandler = null
-    )
-    {
+    ) {
         // Needed for the fallback response in case of no payload
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;

@@ -1,10 +1,13 @@
 <?php
+
 namespace Horde\Http\Server;
+
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use InvalidArgumentException;
 
 /**
  * RequestBuilder applies global state or other resources to a ServerRequest
@@ -20,11 +23,10 @@ class RequestBuilder
     private UriFactoryInterface $uriFactory;
 
     public function __construct(
-        ServerRequestFactoryInterface $requestFactory, 
+        ServerRequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
         UriFactoryInterface $uriFactory
-    )
-    {
+    ) {
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
         $this->uriFactory = $uriFactory;
@@ -87,6 +89,17 @@ class RequestBuilder
     public function withHeaders(array $headers): self
     {
         foreach ($headers as $header => $value) {
+            if (is_array($value)) {
+                foreach ($value as $listItem) {
+                    if (!is_string($listItem)) {
+                        throw new InvalidArgumentException('Header value must be a string or an array of strings');
+                    }
+                }
+            } else {
+                if (!is_string($value)) {
+                    throw new InvalidArgumentException('Header value must be a string or an array of strings');
+                }
+            }
             $this->request = $this->request->withHeader($header, $value);
         }
         return $this;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
  *
@@ -10,7 +11,9 @@
  * @license  http://www.horde.org/licenses/bsd BSD
  * @package  Controller
  */
+
 namespace Horde\Http\Server;
+
 use Psr\Http\Message\ResponseInterface;
 
 /**

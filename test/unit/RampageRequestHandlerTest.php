@@ -12,9 +12,13 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
+
+/**
+ * @coversNothing
+ */
 class RampageRequestHandlerTest extends TestCase
 {
-    public function testAddMiddleware()
+    public function testAddMiddleware(): void
     {
         $responseFactory = new ResponseFactory();
         $streamFactory = new StreamFactory();
@@ -29,17 +33,20 @@ class RampageRequestHandlerTest extends TestCase
         $handler->addMiddleware($middlewareMock1);
         $handler->addMiddleware($middlewareMock2);
         $handler->addMiddleware($middlewareMock3);
-        $firstInNumber = $handler->nextMiddleware()->process($mockRequest, $handler)->getStatusCode();
-        $this->assertSame(201, $firstInNumber);
-        $firstInNumber = $handler->nextMiddleware()->process($mockRequest, $handler)->getStatusCode();
-        $this->assertSame(202, $firstInNumber);
-        $firstInNumber = $handler->nextMiddleware()->process($mockRequest, $handler)->getStatusCode();
-        $this->assertSame(203, $firstInNumber);
-        $emptyStak = $handler->nextMiddleware();
-        $this->assertSame(null, $emptyStak);
+        for ($i = 201; $i <= 203; $i++) {
+            $fetchedMiddleware = $handler->nextMiddleware();
+            if ($fetchedMiddleware) {
+                $this->assertSame($i, $fetchedMiddleware->process($mockRequest, $handler)->getStatusCode(), "Middleware layer $i");
+            } else {
+                $this->fail('No middleware returned when expected');
+            }
+        }
+
+        $emptyStack = $handler->nextMiddleware();
+        $this->assertSame(null, $emptyStack);
     }
 
-    public function testSetPayloadHandler()
+    public function testSetPayloadHandler(): void
     {
         $responseFactory = new ResponseFactory();
         $streamFactory = new StreamFactory();
@@ -52,7 +59,7 @@ class RampageRequestHandlerTest extends TestCase
         $this->assertSame(200, $handled->getStatusCode());
     }
 
-    public function testHandleWithSetMiddelware()
+    public function testHandleWithSetMiddelware(): void
     {
         $responseFactory = new ResponseFactory();
         $streamFactory = new StreamFactory();
@@ -67,7 +74,7 @@ class RampageRequestHandlerTest extends TestCase
         $this->assertSame(404, $handled->getStatusCode());
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $responseFactory = new ResponseFactory();
         $streamFactory = new StreamFactory();

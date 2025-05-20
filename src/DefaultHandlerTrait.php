@@ -1,5 +1,7 @@
 <?php
+
 namespace Horde\Http\Server;
+
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -12,7 +14,8 @@ use Psr\Http\Message\StreamFactoryInterface;
  *
  *
  */
-trait DefaultHandlerTrait {
+trait DefaultHandlerTrait
+{
     protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;
 

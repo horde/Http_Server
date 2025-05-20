@@ -1,6 +1,7 @@
 <?php
 
 namespace Horde\Http\Server;
+
 use Psr\Http\Message\ResponseInterface;
 
 interface ResponseWriterInterface

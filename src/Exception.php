@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2007 Maintainable Software, LLC
  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
@@ -13,7 +14,9 @@
  * @license  http://www.horde.org/licenses/bsd
  * @package  Controller
  */
+
 namespace Horde\Http\Server;
+
 /**
  *
  *
@@ -26,7 +29,4 @@ namespace Horde\Http\Server;
  * @license   http://www.horde.org/licenses/bsd
  * @package   Controller
  */
-class Exception extends \Horde_Exception_Wrapped
-{
-
-}
+class Exception extends \Horde_Exception_Wrapped {}

@@ -1,6 +1,8 @@
 <?php
+
 namespace Horde\Http\Server\Test\Unit;
-use \PHPUnit\Framework\TestCase;
+
+use PHPUnit\Framework\TestCase;
 use Horde\Http\RequestFactory;
 use Horde\Http\ResponseFactory;
 use Horde\Http\StreamFactory;
@@ -13,14 +15,15 @@ use Psr\Http\Message\ResponseInterface;
  * @category   Horde
  * @package    Http_Server
  * @subpackage UnitTests
+ * @coversNothing
  */
 class SimpleTest extends TestCase
 {
-    public function testRunnerSetup()
+    public function testRunnerSetup(): void
     {
         // Production code would use Injector/DIC instead
-        $responseFactory = new ResponseFactory;
-        $streamFactory = new StreamFactory;
+        $responseFactory = new ResponseFactory();
+        $streamFactory = new StreamFactory();
         $handler = new RampageRequestHandler($responseFactory, $streamFactory);
         $requestFactory = new RequestFactory();
         $request = $requestFactory->createServerRequest('GET', 'https://www.horde.org');
