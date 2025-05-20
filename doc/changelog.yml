@@ -1,0 +1,28 @@
+---
+1.0.0-alpha2:
+  api: 1.0.0-alpha1
+  state:
+    release: true
+    api: true
+  date: 2025-05-20
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    style: Reach phpstan level 9 compatibility and various ws fixes
+    fix: Unit test no longer sets non-existing public property as a marker.
+    fix: Make nullable parameter explicit
+    ci: Update tool chain to PHPUnit 12. Drop support for PHP 7. Drop dependency on horde/test
+1.0.0-alpha1:
+  api: 1.0.0alpha1
+  state:
+    release: dev
+    api: dev
+  date: 2021-10-12
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    Original version string was 1.0.0alpha1
+    [rla] New Library spun off horde/controller originally by Chuck Hagenbuch and Mike Naberezny.
+    [rla] Implement PSR-15 Middleware and RequestHandler
