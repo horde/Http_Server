@@ -7,32 +7,34 @@ use Horde\Http\RequestFactory;
 use Horde\Http\ResponseFactory;
 use Horde\Http\StreamFactory;
 use Horde\Http\Server\RampageRequestHandler;
+use Horde\Http\ServerRequest;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
+use Psr\Http\Message\ServerRequestFactoryInterface;
 class RampageRequestHandlerTest extends TestCase
 {
     public function testAddMiddleware()
     {
         $responseFactory = new ResponseFactory();
         $streamFactory = new StreamFactory();
+        $mockRequest = $this->createMock(ServerRequest::class);
         $handler = new RampageRequestHandler($responseFactory, $streamFactory);
         $middlewareMock1 = $this->createMock(MiddlewareInterface::class);
-        $middlewareMock1->n = 1;
+        $middlewareMock1->method('process')->willReturn($responseFactory->createResponse(201));
         $middlewareMock2 = $this->createMock(MiddlewareInterface::class);
-        $middlewareMock2->n = 2;
+        $middlewareMock2->method('process')->willReturn($responseFactory->createResponse(202));
         $middlewareMock3 = $this->createMock(MiddlewareInterface::class);
-        $middlewareMock3->n = 3;
+        $middlewareMock3->method('process')->willReturn($responseFactory->createResponse(203));
         $handler->addMiddleware($middlewareMock1);
         $handler->addMiddleware($middlewareMock2);
         $handler->addMiddleware($middlewareMock3);
-        $firstInNumber = $handler->nextMiddleware()->n;
-        $this->assertSame(1, $firstInNumber);
-        $firstInNumber = $handler->nextMiddleware()->n;
-        $this->assertSame(2, $firstInNumber);
-        $firstInNumber = $handler->nextMiddleware()->n;
-        $this->assertSame(3, $firstInNumber);
+        $firstInNumber = $handler->nextMiddleware()->process($mockRequest, $handler)->getStatusCode();
+        $this->assertSame(201, $firstInNumber);
+        $firstInNumber = $handler->nextMiddleware()->process($mockRequest, $handler)->getStatusCode();
+        $this->assertSame(202, $firstInNumber);
+        $firstInNumber = $handler->nextMiddleware()->process($mockRequest, $handler)->getStatusCode();
+        $this->assertSame(203, $firstInNumber);
         $emptyStak = $handler->nextMiddleware();
         $this->assertSame(null, $emptyStak);
     }
