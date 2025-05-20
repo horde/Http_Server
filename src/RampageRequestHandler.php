@@ -54,7 +54,7 @@ class RampageRequestHandler implements RequestHandlerInterface
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
         iterable $middlewares = [],
-        RequestHandlerInterface $payloadHandler = null
+        ?RequestHandlerInterface $payloadHandler = null
     )
     {
         // Needed for the fallback response in case of no payload
