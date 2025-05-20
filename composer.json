@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/http_server",
     "description": "HTTP Request Handling Library adhering to PSR-15 standard. This evolved out of horde/controller.",
     "type": "library",
@@ -12,22 +11,19 @@
             "role": "lead"
         }
     ],
-    "time": "2021-10-12",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://horde-satis.maintaina.com/"
-        }
-    ],
+    "time": "2025-05-20",
+    "repositories": [],
     "require": {
-        "php": "^7 || ^8",
+        "php": "^8",
         "psr/http-server-middleware": "^1",
         "psr/http-server-handler": "^1",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/http": "^3 || dev-FRAMEWORK_6_0"
+        "horde/http": "3.0.0alpha8"
     },
     "require-dev": {
-        "horde/test": "^3 || dev-FRAMEWORK_6_0"
+        "phpunit/phpunit": "^12",
+        "friendsofphp/php-cs-fixer": "^3",
+        "phpstan/phpstan": "^2"
     },
     "suggest": {
         "ext-mbstring": "*",
@@ -42,5 +38,11 @@
         "psr-4": {
             "Horde\\Http\\Server\\Test\\": "test/"
         }
-    }
+    },
+    "config": {
+        "allow-plugins": {
+            "horde/horde-installer-plugin": true
+        }
+    },
+    "minimum-stability": "dev"
 }

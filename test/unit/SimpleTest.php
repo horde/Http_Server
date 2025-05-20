@@ -1,5 +1,5 @@
 <?php
-namespace Horde\Http\Server\Test;
+namespace Horde\Http\Server\Test\Unit;
 use \PHPUnit\Framework\TestCase;
 use Horde\Http\RequestFactory;
 use Horde\Http\ResponseFactory;
