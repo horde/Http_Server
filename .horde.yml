@@ -26,6 +26,9 @@ state:
 license:
   identifier: BSD-2-Clause
   uri: http://www.horde.org/licenses/bsd
+provides:
+      psr/http-server-middleware-implementation: ^1
+      psr/http-server-handler-implementation: ^1
 dependencies:
   required:
     php: ^8

@@ -11,7 +11,7 @@
             "role": "lead"
         }
     ],
-    "time": "2025-05-20",
+    "time": "2025-07-01",
     "repositories": [],
     "require": {
         "php": "^8",
@@ -40,8 +40,15 @@
         }
     },
     "config": {
-        "allow-plugins": {
-            "horde/horde-installer-plugin": true
+        "allow-plugins": {}
+    },
+    "provide": {
+        "psr/http-server-middleware-implementation": "^1",
+        "psr/http-server-handler-implementation": "^1"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-FRAMEWORK_6_0": "1.x-dev"
         }
     }
 }
