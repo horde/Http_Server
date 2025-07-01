@@ -18,7 +18,7 @@ authors:
     active: true
     role: lead
 version:
-  release: 1.0.0-alpha2
+  release: 1.0.0-beta1
   api: 1.0.0alpha1
 state:
   release: alpha
@@ -27,8 +27,8 @@ license:
   identifier: BSD-2-Clause
   uri: http://www.horde.org/licenses/bsd
 provides:
-      psr/http-server-middleware-implementation: ^1
-      psr/http-server-handler-implementation: ^1
+  psr/http-server-middleware-implementation: ^1
+  psr/http-server-handler-implementation: ^1
 dependencies:
   required:
     php: ^8
