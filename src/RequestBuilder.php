@@ -39,7 +39,7 @@ class RequestBuilder
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-        if ($_SERVER['REQUEST_SCHEME']) {
+        if (!empty($_SERVER['REQUEST_SCHEME'])) {
             $scheme = $_SERVER['REQUEST_SCHEME'];
         } elseif (!empty($_SERVER['HTTPS'])) {
             if ($_SERVER['HTTPS'] == 'off') {
