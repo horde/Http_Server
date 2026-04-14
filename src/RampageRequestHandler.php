@@ -2,6 +2,8 @@
 
 namespace Horde\Http\Server;
 
+use Horde\Http\ResponseFactory;
+use Horde\Http\StreamFactory;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -52,10 +54,10 @@ class RampageRequestHandler implements RequestHandlerInterface
      * @param RequestHandlerInterface|null $payloadHandler
      */
     public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory,
+        ResponseFactoryInterface $responseFactory = new ResponseFactory(),
+        StreamFactoryInterface $streamFactory = new StreamFactory(),
         iterable $middlewares = [],
-        ?RequestHandlerInterface $payloadHandler = null
+        ?RequestHandlerInterface $payloadHandler = null,
     ) {
         // Needed for the fallback response in case of no payload
         $this->responseFactory = $responseFactory;

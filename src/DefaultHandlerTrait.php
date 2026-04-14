@@ -2,6 +2,8 @@
 
 namespace Horde\Http\Server;
 
+use Horde\Http\ResponseFactory;
+use Horde\Http\StreamFactory;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -19,8 +21,10 @@ trait DefaultHandlerTrait
     protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;
 
-    public function __construct(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory)
-    {
+    public function __construct(
+        ResponseFactoryInterface $responseFactory = new ResponseFactory(),
+        StreamFactoryInterface $streamFactory = new StreamFactory(),
+    ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
     }

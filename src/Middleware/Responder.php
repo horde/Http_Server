@@ -2,6 +2,8 @@
 
 namespace Horde\Http\Server\Middleware;
 
+use Horde\Http\ResponseFactory;
+use Horde\Http\StreamFactory;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -22,8 +24,10 @@ class Responder implements MiddlewareInterface
     protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;
 
-    public function __construct(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory)
-    {
+    public function __construct(
+        ResponseFactoryInterface $responseFactory = new ResponseFactory(),
+        StreamFactoryInterface $streamFactory = new StreamFactory(),
+    ) {
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
     }

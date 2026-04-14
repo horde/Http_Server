@@ -14,6 +14,7 @@
 
 namespace Horde\Http\Server;
 
+use Horde\Http\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -35,8 +36,9 @@ class Gzip implements MiddlewareInterface
 {
     private StreamFactoryInterface $streamFactory;
 
-    public function __construct(StreamFactoryInterface $streamFactory)
-    {
+    public function __construct(
+        StreamFactoryInterface $streamFactory = new StreamFactory(),
+    ) {
         $this->streamFactory = $streamFactory;
     }
 
