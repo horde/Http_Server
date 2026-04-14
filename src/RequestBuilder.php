@@ -2,6 +2,9 @@
 
 namespace Horde\Http\Server;
 
+use Horde\Http\RequestFactory;
+use Horde\Http\StreamFactory;
+use Horde\Http\UriFactory;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -23,9 +26,9 @@ class RequestBuilder
     private UriFactoryInterface $uriFactory;
 
     public function __construct(
-        ServerRequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        UriFactoryInterface $uriFactory
+        ServerRequestFactoryInterface $requestFactory = new RequestFactory(),
+        StreamFactoryInterface $streamFactory = new StreamFactory(),
+        UriFactoryInterface $uriFactory = new UriFactory(),
     ) {
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;

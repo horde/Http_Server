@@ -19,8 +19,10 @@ class Runner
     protected RequestHandlerInterface $handler;
     protected ResponseWriterInterface $responseWriter;
 
-    public function __construct(RequestHandlerInterface $handler, ResponseWriterInterface $responseWriter)
-    {
+    public function __construct(
+        RequestHandlerInterface $handler,
+        ResponseWriterInterface $responseWriter = new ResponseWriterWeb(),
+    ) {
         $this->handler = $handler;
         $this->responseWriter = $responseWriter;
     }
