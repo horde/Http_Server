@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Example 2:
  *
@@ -40,7 +41,7 @@ $requestBuilder = new RequestBuilder($requestFactory, $streamFactory, $uriFactor
 $request = $requestBuilder->withGlobalVariables()->build();
 
 $middlewares = [
-    new Responder($responseFactory, $streamFactory)
+    new Responder($responseFactory, $streamFactory),
 ];
 $handler = new RampageRequestHandler($responseFactory, $streamFactory, $middlewares);
 $runner = new Runner($handler, new ResponseWriterWeb());

@@ -10,7 +10,7 @@ use Horde\Http\Server\RampageRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * @author     Ralf Lang <lang@b1-systems.de>
+ * @author     Ralf Lang <ralf.lang@ralf-lang.de>
  * @license    http://www.horde.org/licenses/bsd LGPL BSD-3-Clause
  * @category   Horde
  * @package    Http_Server

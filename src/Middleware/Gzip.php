@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you
  * did not receive this file, see http://www.horde.org/licenses/bsd.
@@ -25,7 +25,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Filter to gzip content before being served
  *
  * @author    James Pepin <james@bluestatedigital.com>
- * @author    Ralf Lang <lang@b1-systems.de>
+ * @author    Ralf Lang <ralf.lang@ralf-lang.de>
  * @category  Horde
  * @copyright 2008-2021 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
