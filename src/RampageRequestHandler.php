@@ -1,15 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Horde\Http\Server;
 
 use Horde\Http\ResponseFactory;
 use Horde\Http\StreamFactory;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use RuntimeException;
 
 /**
  * The Rampage request handler.
@@ -29,8 +33,6 @@ use Psr\Http\Message\StreamFactoryInterface;
  * Once a response is returned, the response object passes back through
  * all the previous layers and may be changed by them or cause side effects.
  *
- * The final response returned by RampageRequestHandler should
- *
  * Note that middlewares or the payload could themselves delegate their
  * duties to other middlewares, handlers or other code
  */
@@ -38,39 +40,38 @@ class RampageRequestHandler implements RequestHandlerInterface
 {
     protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;
-    /**
-     * @var MiddlewareInterface[]
-     */
+    private ?ContainerInterface $container;
+    /** @var array<string|MiddlewareInterface> */
     private array $middlewares = [];
-
-    private ?RequestHandlerInterface $payloadHandler;
+    private string|RequestHandlerInterface|null $payloadHandler;
 
     /**
      * Constructor
      *
      * @param ResponseFactoryInterface $responseFactory
      * @param StreamFactoryInterface $streamFactory
-     * @param MiddlewareInterface[] $middlewares
-     * @param RequestHandlerInterface|null $payloadHandler
+     * @param iterable<string|MiddlewareInterface> $middlewares
+     * @param string|RequestHandlerInterface|null $payloadHandler
+     * @param ContainerInterface|null $container PSR-11 container for lazy middleware resolution
      */
     public function __construct(
         ResponseFactoryInterface $responseFactory = new ResponseFactory(),
         StreamFactoryInterface $streamFactory = new StreamFactory(),
         iterable $middlewares = [],
-        ?RequestHandlerInterface $payloadHandler = null,
+        string|RequestHandlerInterface|null $payloadHandler = null,
+        ?ContainerInterface $container = null,
     ) {
-        // Needed for the fallback response in case of no payload
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
-        // We accept any iterable but cast it to array
-        $this->middlewares = (array) $middlewares;
+        $this->middlewares = [...$middlewares];
         $this->payloadHandler = $payloadHandler;
+        $this->container = $container;
     }
 
     /**
      * Add another middleware to the queue just before the payload handler
      */
-    public function addMiddleware(MiddlewareInterface $middleware): void
+    public function addMiddleware(string|MiddlewareInterface $middleware): void
     {
         $this->middlewares[] = $middleware;
     }
@@ -78,14 +79,32 @@ class RampageRequestHandler implements RequestHandlerInterface
     /**
      * Configure the payload handler
      */
-    public function setPayloadHandler(RequestHandlerInterface $handler): void
+    public function setPayloadHandler(string|RequestHandlerInterface $handler): void
     {
         $this->payloadHandler = $handler;
     }
 
     public function nextMiddleware(): ?MiddlewareInterface
     {
-        return array_shift($this->middlewares);
+        $entry = array_shift($this->middlewares);
+        if ($entry === null) {
+            return null;
+        }
+        if ($entry instanceof MiddlewareInterface) {
+            return $entry;
+        }
+        if ($this->container === null) {
+            throw new RuntimeException(
+                sprintf('Cannot resolve middleware "%s": no container provided.', $entry)
+            );
+        }
+        $resolved = $this->container->get($entry);
+        if (!$resolved instanceof MiddlewareInterface) {
+            throw new RuntimeException(
+                sprintf('Container returned non-middleware for "%s": got %s', $entry, get_debug_type($resolved))
+            );
+        }
+        return $resolved;
     }
 
     /**
@@ -97,7 +116,7 @@ class RampageRequestHandler implements RequestHandlerInterface
      * If the middlewares created no response,
      * the payload handler will.
      *
-     * Finally the we will return a response ourselves.
+     * Finally we will return a response ourselves.
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -105,8 +124,9 @@ class RampageRequestHandler implements RequestHandlerInterface
         if ($middleware) {
             return $middleware->process($request, $this);
         }
-        if ($this->payloadHandler) {
-            return $this->payloadHandler->handle($request);
+        $payloadHandler = $this->resolvePayloadHandler();
+        if ($payloadHandler) {
+            return $payloadHandler->handle($request);
         }
         // Fallback response
         $code = 404;
@@ -114,5 +134,28 @@ class RampageRequestHandler implements RequestHandlerInterface
         $body = $this->streamFactory->createStream($reason);
 
         return $this->responseFactory->createResponse($code, $reason)->withBody($body);
+    }
+
+    private function resolvePayloadHandler(): ?RequestHandlerInterface
+    {
+        if ($this->payloadHandler === null) {
+            return null;
+        }
+        if ($this->payloadHandler instanceof RequestHandlerInterface) {
+            return $this->payloadHandler;
+        }
+        if ($this->container === null) {
+            throw new RuntimeException(
+                sprintf('Cannot resolve payload handler "%s": no container provided.', $this->payloadHandler)
+            );
+        }
+        $resolved = $this->container->get($this->payloadHandler);
+        if (!$resolved instanceof RequestHandlerInterface) {
+            throw new RuntimeException(
+                sprintf('Container returned non-handler for "%s": got %s', $this->payloadHandler, get_debug_type($resolved))
+            );
+        }
+        $this->payloadHandler = $resolved;
+        return $resolved;
     }
 }
