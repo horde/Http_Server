@@ -38,6 +38,9 @@ dependencies:
       horde/exception: ^3
       horde/http: ^3
   optional:
+    composer:
+      psr/container: ^2.02
+      horde/injector: '*'
     ext:
       mbstring: '*'
       zlib: '*'
