@@ -49,6 +49,18 @@
     Original version string was 1.0.0alpha1
     [rla] New Library spun off horde/controller originally by Chuck Hagenbuch and Mike Naberezny.
     [rla] Implement PSR-15 Middleware and RequestHandler
+1.0.0-RC2:
+  api: 1.0.0-RC2
+  state:
+    release: RC
+    api: RC
+  date: 2026-06-11
+  license:
+    identifier: BSD-2-Clause
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: |-
+    feat: Add an adapter between horde/http's OO cookie model and PSR-7 requests
+    chore: Update workflow dependency
 1.0.0-RC1:
   api: 1.0.0-RC1
   state:
