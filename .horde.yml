@@ -11,8 +11,7 @@ list: dev
 type: library
 homepage: https://www.horde.org/libraries/Horde_Controller
 authors:
-  -
-    name: Ralf Lang
+  - name: Ralf Lang
     user: rlang
     email: lang@b1-systems.de
     active: true
@@ -49,3 +48,22 @@ keywords:
   - middleware
   - requesthandler
   - psr15
+ci-platform:
+  '8.1':
+    - php: ^7.4 || ^8
+    - ext-dom
+  '8.2':
+    - php: ^7.4 || ^8
+    - ext-dom
+  '8.3':
+    - php: ^7.4 || ^8
+    - ext-dom
+  '8.4':
+    - php: ^7.4 || ^8
+    - ext-dom
+  '8.5':
+    - php: ^7.4 || ^8
+    - ext-dom
+  '8.6':
+    - php: ^7.4 || ^8
+    - ext-dom
