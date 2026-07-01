@@ -11,6 +11,8 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use InvalidArgumentException;
+use function getallheaders;
+use function function_exists;
 
 /**
  * RequestBuilder applies global state or other resources to a ServerRequest
@@ -69,7 +71,7 @@ class RequestBuilder
         $body = $this->streamFactory->createStreamFromFile('php://input', 'r+');
 
         $protocol = !empty($_SERVER['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
-        $headers = getallheaders();
+        $headers = function_exists('getallheaders') ? getallheaders() : self::headersFromServer($_SERVER);
 
         $this->request = $this->requestFactory
             ->createServerRequest($method, $uri, $_SERVER)
@@ -111,5 +113,37 @@ class RequestBuilder
     public function build(): ServerRequestInterface
     {
         return $this->request;
+    }
+
+    /**
+     * Reconstruct HTTP request headers from $_SERVER.
+     *
+     * Fallback for SAPIs where the getallheaders() function is not
+     * available (CLI, and some FPM builds). Mirrors the shape returned
+     * by getallheaders(): header names are the natural "Header-Name"
+     * spelling, values are strings.
+     *
+     * @param array<string, mixed> $server $_SERVER superglobal or an
+     *                                     equivalent array.
+     * @return array<string, string>
+     */
+    private static function headersFromServer(array $server): array
+    {
+        $headers = [];
+        foreach ($server as $key => $value) {
+            if (!is_string($value)) {
+                continue;
+            }
+            if (str_starts_with($key, 'HTTP_')) {
+                $name = substr($key, 5);
+            } elseif ($key === 'CONTENT_TYPE' || $key === 'CONTENT_LENGTH' || $key === 'CONTENT_MD5') {
+                $name = $key;
+            } else {
+                continue;
+            }
+            $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $name))));
+            $headers[$name] = $value;
+        }
+        return $headers;
     }
 }
